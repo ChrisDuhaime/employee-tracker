@@ -1,9 +1,15 @@
+/*Importing packages/connection */
+
+
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const cTable = require('console.table');
 const connection = require('./config/connection');
+
 const initOptions = ['View all Employees', 'Add Employee', 'Update Employee Role', 'View all Roles', 'Add Role', 'View all Departments', 'Add Department', 'Exit'];
+
+
 const viewEmployeesQuery = `SELECT e.id, e.first_name, e.last_name, r.title, d.dept_name, r.salary, CONCAT(m.first_name," ",m.last_name) AS "manager"
 FROM employees AS e
 LEFT JOIN roles AS r 
@@ -67,7 +73,7 @@ const startApp = () => {
 }
 
 /*The second form .query(sqlString, values, callback) https://www.npmjs.com/package/mysql */
-
+/*View Employees Function */
 const viewEmployees = () => {
   connection.query(viewEmployeesQuery, (err, results) => {
     if (err) throw err;
@@ -77,6 +83,7 @@ const viewEmployees = () => {
   })
 }
 
+/*Add Employees Function */
 
 const addEmployee = () => {
     const query = `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
@@ -90,6 +97,7 @@ const addEmployee = () => {
       });
     });
 }
+/*Update Role Function */
 
 const updateRole = () => {
   const query = `SELECT CONCAT (first_name," ",last_name) AS full_name FROM employees; SELECT title FROM roles`;
@@ -124,6 +132,7 @@ const updateRole = () => {
     })
   })
 }
+/*View Roles Function */
 
 const viewRoles = () => {
   let query = `SELECT * FROM roles`;
@@ -133,9 +142,11 @@ const viewRoles = () => {
     }
     console.log(' ');
     console.table(chalk.yellow('All Roles'), results);
+    /*startApp() keeps the application looping unless they choose to exit */
     startApp();
   })
 }
+/*Add Role Function */
 
 const addRole = () => {
 
@@ -167,6 +178,7 @@ const addRole = () => {
 
   })
 }
+/*View Departments Function */
 
 const viewDept = () => {
   query = `SELECT * FROM departments`;
@@ -179,6 +191,7 @@ const viewDept = () => {
     startApp();
   });
 }
+/*Add Department Function */
 
 const addDept = () => {
   inquirer.prompt([
